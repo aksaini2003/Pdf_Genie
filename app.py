@@ -40,7 +40,7 @@
 #         return chunks
 #     #lets convert the text chunks into the vectors 
 #     def get_vector_store(text_chunks):
-#         embeddings=GoogleGenerativeAIEmbeddings(model='models/embedding-001')
+#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004')
 #         vector_store=FAISS.from_texts(text_chunks,embedding=embeddings)
 #         vector_store.save_local('faiss_index')
 #     def get_conversational_chain():
@@ -56,7 +56,7 @@
 #         chain=load_qa_chain(model,chain_type='stuff',prompt=prompt)
 #         return chain 
 #     def user_input(user_question):
-#         embeddings=GoogleGenerativeAIEmbeddings(model='models/embedding-001')
+#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004')
 #         new_db=FAISS.load_local('faiss_index',embeddings)
 #         docs=new_db.similarity_search(user_question)
 #         chain=get_conversational_chain()
