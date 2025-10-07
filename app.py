@@ -40,7 +40,7 @@
 #         return chunks
 #     #lets convert the text chunks into the vectors 
 #     def get_vector_store(text_chunks):
-#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004')
+#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004',api_key=google_api_key)
 #         vector_store=FAISS.from_texts(text_chunks,embedding=embeddings)
 #         vector_store.save_local('faiss_index')
 #     def get_conversational_chain():
@@ -56,7 +56,7 @@
 #         chain=load_qa_chain(model,chain_type='stuff',prompt=prompt)
 #         return chain 
 #     def user_input(user_question):
-#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004')
+#         embeddings=GoogleGenerativeAIEmbeddings(model='models/text-embedding-004',api_key=google_api_key)
 #         new_db=FAISS.load_local('faiss_index',embeddings)
 #         docs=new_db.similarity_search(user_question)
 #         chain=get_conversational_chain()
@@ -99,8 +99,8 @@ from dotenv import load_dotenv
 
 # Load API key
 load_dotenv()
-genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
-
+# genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
+google_api_key=st.secrets['GOOGLE_API_KEY']
 def get_pdf_text(docs):
     """Extracts text from multiple PDF files."""
     text = ""
@@ -117,7 +117,7 @@ def get_txt_chunks(text):
 
 def get_vector_store(text_chunks):
     """Converts text chunks into vector embeddings and saves them."""
-    embeddings = GoogleGenerativeAIEmbeddings(model='models/embedding-001')
+    embeddings = GoogleGenerativeAIEmbeddings(model='models/text-embedding-004',api_key=google_api_key)
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
    
 
@@ -134,7 +134,7 @@ def get_conversational_chain():
     Question: \n{question}\n
     Answer:
     '''
-    model = ChatGoogleGenerativeAI(model='gemini-2.0-flash', temperature=0.3)
+    model = ChatGoogleGenerativeAI(model='gemini-2.0-flash', temperature=0.3,api_key=google_api_key)
     prompt = PromptTemplate(template=prompt_template, input_variables=['context', 'question'])
     return load_qa_chain(model, chain_type='stuff', prompt=prompt)
 
@@ -152,7 +152,7 @@ def get_conversational_chain():
 #     st.write('Reply:', response.get('output_text', 'Error generating response'))
 def user_input(user_question):
     """Handles user input and fetches answers."""
-    embeddings = GoogleGenerativeAIEmbeddings(model='models/embedding-001')
+    embeddings = GoogleGenerativeAIEmbeddings(model='models/text-embedding-004',api_key=google_api_key)
     new_db = FAISS.load_local('faiss_index', embeddings, allow_dangerous_deserialization=True)
     docs = new_db.similarity_search(user_question)
     chain = get_conversational_chain()
